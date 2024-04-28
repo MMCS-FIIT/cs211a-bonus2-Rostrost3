@@ -25,6 +25,8 @@ namespace Telegram_bot
 
         public static List<string> AnswId = new List<string>();
 
+        public static List<string> StickersId = new List<string>();
+
         public static async Task Update(ITelegramBotClient botclient, Update update, CancellationToken token)
         {
             try
@@ -41,6 +43,7 @@ namespace Telegram_bot
                                         if (message.Text.ToLower().Contains("привет") || message.Text.ToLower().Contains("/start"))
                                         {
                                             await botclient.SendTextMessageAsync(message.Chat.Id, "Привет! :)");
+                                            await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersId[r.Next(StickersId.Count() + 1)]));
                                             return;
                                         }
                                         if (message.Text.ToLower().Contains("закончить") || message.Text.ToLower().Contains("/end"))
@@ -98,6 +101,7 @@ namespace Telegram_bot
                 }
                 ListOfRandoms.Add(y);
 
+                //Некоторые картинки в файле не открываются, поэтому, если бот не может отправить фотку, то скипаем его
                 try
                 {
                     await botclient.SendPhotoAsync(message.Chat.Id, InputFile.FromUri(FootballPlayers[y][0]));

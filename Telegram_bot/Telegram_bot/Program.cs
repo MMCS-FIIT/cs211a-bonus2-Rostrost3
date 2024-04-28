@@ -21,6 +21,7 @@ namespace Telegram_bot
             //CorrectAnswers.Add("Virgil van Dijk");
 
             Parsing.Parssing();
+            Parsing.ParssingStickers();
 
             var client = new TelegramBotClient("6668334841:AAFfb4xkbEGL-HQ_d7AEdABDL2JgH30CH7Y");
 

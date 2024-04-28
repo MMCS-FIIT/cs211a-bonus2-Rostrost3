@@ -7,7 +7,7 @@ namespace Telegram_bot
         public static void Parssing()
         {
             var c = 0;
-            var p = File.ReadAllLines("Football Players/Fifa23.csv");
+            var p = File.ReadAllLines("Files/Fifa23.csv");
             for (int i = 1; i < p.Length-3; i += 3)
             {
                 var a = new string[] { p[i], p[i + 1], p[i + 2], p[i + 3] };
@@ -23,6 +23,11 @@ namespace Telegram_bot
                 Game.FootballPlayers[c] = new string[] { z.ToString(), b[0][1], b[1][1], b[2][1], b[3][1] }; //Варианты ответа
                 c++;
             }
+        }
+
+        public static void ParssingStickers()
+        {
+            Game.StickersId = File.ReadAllLines("Files/StickersId.txt").ToList();
         }
     }
 }
