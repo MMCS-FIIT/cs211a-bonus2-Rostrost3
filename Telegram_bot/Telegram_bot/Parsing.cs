@@ -17,10 +17,10 @@ namespace Telegram_bot
                     b.Add(a[x].Split(new char[] { ',' }));
                 }
 
-                var y = Program.r.Next(0, a.Length); //Рандомный игрок
+                var y = Game.r.Next(0, a.Length); //Рандомный игрок
                 var z = Regex.Match(string.Join('\n', b[y]),@"\bhttps.*\.png"); //Фотография
-                Program.CorrectAnswers.Add(b[y][1]); //Правильный ответ
-                Program.FootballPlayers[c] = new string[] { z.ToString(), b[0][1], b[1][1], b[2][1], b[3][1] }; //Варианты ответа
+                Game.CorrectAnswers.Add(b[y][1]); //Правильный ответ
+                Game.FootballPlayers[c] = new string[] { z.ToString(), b[0][1], b[1][1], b[2][1], b[3][1] }; //Варианты ответа
                 c++;
             }
         }
