@@ -27,7 +27,8 @@ namespace Telegram_bot
 
         public static void ParssingStickers()
         {
-            Game.StickersId = File.ReadAllLines("Files/StickersId.txt").ToList();
+            Game.StickersIdCats = File.ReadAllLines("Files/StickersIdCats.txt").ToList();
+            Game.StickersIdPeopleMemes = File.ReadAllLines("Files/StickersIdPeopleMemes.txt").ToList();
         }
     }
 }

@@ -20,8 +20,8 @@ namespace Telegram_bot
             //CorrectAnswers.Add("Erling Haaland");
             //CorrectAnswers.Add("Virgil van Dijk");
 
-            Parsing.Parssing();
-            Parsing.ParssingStickers();
+            Parsing.Parssing(); //Файл с футболистами
+            Parsing.ParssingStickers(); //Файлы со стикерами
 
             var client = new TelegramBotClient("6668334841:AAFfb4xkbEGL-HQ_d7AEdABDL2JgH30CH7Y");
 

@@ -25,7 +25,9 @@ namespace Telegram_bot
 
         public static List<string> AnswId = new List<string>();
 
-        public static List<string> StickersId = new List<string>();
+        public static List<string> StickersIdCats = new List<string>();
+
+        public static List<string> StickersIdPeopleMemes = new List<string>();
 
         public static async Task Update(ITelegramBotClient botclient, Update update, CancellationToken token)
         {
@@ -42,8 +44,8 @@ namespace Telegram_bot
                                     {
                                         if (message.Text.ToLower().Contains("привет") || message.Text.ToLower().Contains("/start"))
                                         {
-                                            await botclient.SendTextMessageAsync(message.Chat.Id, "Привет! :)");
-                                            await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersId[r.Next(StickersId.Count() + 1)]));
+                                            await botclient.SendTextMessageAsync(message.Chat.Id, "Привет! :)\nНапиши Играть(/play) чтобы начать игру!");
+                                            await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdCats[r.Next(StickersIdCats.Count() + 1)]));
                                             return;
                                         }
                                         if (message.Text.ToLower().Contains("закончить") || message.Text.ToLower().Contains("/end"))
@@ -56,6 +58,35 @@ namespace Telegram_bot
                                             await MainGame(botclient, message);
                                             return;
                                         }
+                                        return;
+                                    }
+                                case MessageType.Sticker:
+                                    {
+                                        await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdCats[r.Next(StickersIdCats.Count() + 1)]));
+                                        return;
+                                    }
+                                case MessageType.Photo:
+                                    {
+                                        await botclient.SendTextMessageAsync(message.Chat.Id, "Интересная фотография, но давай сыграем!(/play)");
+                                        await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdCats[r.Next(StickersIdCats.Count() + 1)]));
+                                        return;
+                                    }
+                                case MessageType.Voice:
+                                    {
+                                        await botclient.SendTextMessageAsync(message.Chat.Id, "Мои способности не позволяют мне слушать это голосовое. Ты наверняка предлагаешь сыграть?)(/play)");
+                                        await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdPeopleMemes[r.Next(StickersIdPeopleMemes.Count() + 1)]));
+                                        return;
+                                    }
+                                case MessageType.Video:
+                                    {
+                                        await botclient.SendTextMessageAsync(message.Chat.Id, "Я не могу посмотреть это увлекательное видео, поэтому давай поиграем!(/play)");
+                                        await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdPeopleMemes[r.Next(StickersIdPeopleMemes.Count() + 1)]));
+                                        return;
+                                    }
+                                case MessageType.Audio:
+                                    {
+                                        await botclient.SendTextMessageAsync(message.Chat.Id, "Мои способности не позволяют мне слушать это аудио. Ты наверняка предлагаешь сыграть?)(/play)");
+                                        await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdPeopleMemes[r.Next(StickersIdPeopleMemes.Count() + 1)]));
                                         return;
                                     }
                             }
@@ -117,7 +148,17 @@ namespace Telegram_bot
                 {
                     a.Add(new InlineKeyboardButton[] { FootballPlayers[y][i] });
                 }
-                Message b = await botclient.SendTextMessageAsync(message.Chat.Id, "Кто же это?", replyMarkup: inlineKeyboard1);
+                await botclient.SendTextMessageAsync(message.Chat.Id, "Кто же это?", replyMarkup: inlineKeyboard1);
+
+                //Стикеры для разнообразия, иногда отправляет, иногда нет
+                if(y % 3 == 0)
+                {
+                    await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdPeopleMemes[r.Next(0,StickersIdPeopleMemes.Count + 1)]));
+                }
+                else if(y % 3 == 1)
+                {
+                    await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdCats[r.Next(0, StickersIdCats.Count + 1)]));
+                }
 
                 // Ожидание ответа от пользователя
                 Update selectedUpdate = null;
@@ -125,6 +166,7 @@ namespace Telegram_bot
                 {
                     var updates = await botclient.GetUpdatesAsync();
                     selectedUpdate = updates.FirstOrDefault(u => u.Type == UpdateType.CallbackQuery && u.CallbackQuery.Message.Chat.Id == message.Chat.Id && !AnswId.Contains(u.CallbackQuery.Id.ToString())); //Чтобы он не брал предыдущий ответ
+                    //Если пришла другая команда, то надо выйти и посмотреть это
                     if (updates.FirstOrDefault(u => u.Type == UpdateType.Message && !AnswId.Contains(u.Message.MessageId.ToString())) != null)
                     {
                         return;
@@ -142,7 +184,7 @@ namespace Telegram_bot
                 }
                 else
                 {
-                    await botclient.SendTextMessageAsync(message.Chat.Id, $"Не расстраивайтесь\n{selectedPlayer} - неправильный ответ!\nУ вас {c} балл(ов)");
+                    await botclient.SendTextMessageAsync(message.Chat.Id, $"Не расстраивайтесь\n{selectedPlayer} - неправильный ответ!\nУ вас {c} балл(ов)"); //\nПравильный ответ:\n{CorrectAnswers[y]} Добавлю, как разберусь как сделать спойлер
                 }
                 AnswId.Add(selectedUpdate.CallbackQuery.Id.ToString());
             }
