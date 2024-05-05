@@ -8,6 +8,8 @@ namespace Telegram_bot
         {
             var c = 0;
             var p = File.ReadAllLines("Files/Fifa23.csv");
+
+            //Кладём в словарь фото и варианты ответов, по 4 футболистов. Футболист, которого надо угадать, рандомный из 4
             for (int i = 1; i < p.Length-3; i += 3)
             {
                 var a = new string[] { p[i], p[i + 1], p[i + 2], p[i + 3] };
@@ -27,8 +29,8 @@ namespace Telegram_bot
 
         public static void ParssingStickers()
         {
-            Game.StickersIdCats = File.ReadAllLines("Files/StickersIdCats.txt").ToList();
-            Game.StickersIdPeopleMemes = File.ReadAllLines("Files/StickersIdPeopleMemes.txt").ToList();
+            Game.StickersIdCats = File.ReadAllLines("Files/StickersIdCats.txt").Where(x => x != "").ToList();
+            Game.StickersIdPeopleMemes = File.ReadAllLines("Files/StickersIdPeopleMemes.txt").Where(x => x != "").ToList();
         }
     }
 }
