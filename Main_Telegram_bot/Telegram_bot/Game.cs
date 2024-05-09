@@ -8,6 +8,7 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using Telegram.Bot.Types;
 using Telegram.Bot;
+using Telegram.Bot.Types.Passport;
 
 namespace Telegram_bot
 {
@@ -29,7 +30,9 @@ namespace Telegram_bot
 
         public static List<string> StickersIdPeopleMemes = new List<string>(); //Стикеры мемов
 
-        public static int Record = 0; //Рекорд за всё время
+        public static Dictionary<string,int> Record = new Dictionary<string, int>(); //Рекорд: id - макс за все раунды
+
+        public static Dictionary<string, (string, int, string)> Data_Base = new Dictionary<string, (string, int, string)>(); 
 
         public static async Task Update(ITelegramBotClient botclient, Update update, CancellationToken token)
         {
@@ -66,21 +69,45 @@ namespace Telegram_bot
                                             {
                                                 ResizeKeyboard = true,
                                             };
-                                            await botclient.SendTextMessageAsync(message.Chat.Id, $"Привет, {user}! :)\nНапиши Играть(/play) чтобы начать игру!", replyMarkup: replyKeyboard);
+
+                                            if (!Data_Base.ContainsKey(message.Chat.Id.ToString()))
+                                            {
+                                                await botclient.SendTextMessageAsync(message.Chat.Id, $"Привет, {user}! :)\nТы тут первый раз, приятно познакомиться\nНапиши Играть(/play) чтобы начать игру!",replyMarkup: replyKeyboard);
+                                                Record[message.Chat.Id.ToString()] = 0;
+                                                UpdateDataBase(message, user);
+                                                Parsing.LoadingDataBase();
+                                            }
+                                            else
+                                            {
+                                                await botclient.SendTextMessageAsync(message.Chat.Id, $"Привет, {user}! :)\nТы был тут последний раз {Data_Base[message.Chat.Id.ToString()].Item3}\nНапиши Играть(/play) чтобы начать игру!",replyMarkup: replyKeyboard);
+                                                UpdateDataBase(message, user);
+                                            }
 
                                             await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdCats[r.Next(StickersIdCats.Count())]));
                                             return;
                                         }
                                         if (message.Text.ToLower().Contains("пока") || message.Text.ToLower().Contains("/end"))
                                         {
+                                            UpdateDataBase(message, user);
                                             await botclient.SendTextMessageAsync(message.Chat.Id, $"Ваши баллы: {c}\nПока, {user} ;)");
                                             await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString("CAACAgIAAxkBAAEMDjRmN2Bm8O57fdZcQV-zyfaGXwhT9wACoBkAApvQeUh5IuR9qD2hKTUE"));
                                             return;
                                         }
                                         if (message.Text.ToLower().Contains("рекорд") || message.Text.ToLower().Contains("/max"))
                                         {
-                                            await botclient.SendTextMessageAsync(message.Chat.Id, $"Рекорд {user} = {Record}");
+                                            var maxx = int.MinValue;
+                                            var usermax = "";
+                                            foreach(var x in Data_Base.Keys)
+                                            {
+                                                if (Data_Base[x].Item2 > maxx)
+                                                {
+                                                    maxx = Data_Base[x].Item2;
+                                                    usermax = Data_Base[x].Item1;
+                                                }
+                                            }
+                                            await botclient.SendTextMessageAsync(message.Chat.Id, $"Рекорд среди всех пользователей обладает игрок: {usermax} = {maxx}");
                                             await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString("CAACAgIAAxkBAAEMDktmN2ZTSWSxhO3ym5hJeBdRleqX0QACwBsAAskEMUrgWHe0nAUiGzUE"));
+                                            UpdateDataBase(message, user);
                                             return;
                                         }
                                         if (message.Text.ToLower().Contains("играть") || message.Text.ToLower().Contains("/play"))
@@ -92,29 +119,34 @@ namespace Telegram_bot
                                     }
                                 case MessageType.Sticker:
                                     {
+                                        UpdateDataBase(message, user);
                                         await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdCats[r.Next(StickersIdCats.Count())]));
                                         return;
                                     }
                                 case MessageType.Photo:
                                     {
+                                        UpdateDataBase(message, user);
                                         await botclient.SendTextMessageAsync(message.Chat.Id, "Интересная фотография, но давай сыграем!(/play)");
                                         await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdCats[r.Next(StickersIdCats.Count())]));
                                         return;
                                     }
                                 case MessageType.Voice:
                                     {
+                                        UpdateDataBase(message, user);
                                         await botclient.SendTextMessageAsync(message.Chat.Id, "Мои способности не позволяют мне слушать это голосовое. Ты наверняка предлагаешь сыграть?)(/play)");
                                         await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdPeopleMemes[r.Next(StickersIdPeopleMemes.Count())]));
                                         return;
                                     }
                                 case MessageType.Video:
                                     {
+                                        UpdateDataBase(message, user);
                                         await botclient.SendTextMessageAsync(message.Chat.Id, "Я не могу посмотреть это увлекательное видео, поэтому давай поиграем!(/play)");
                                         await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdPeopleMemes[r.Next(StickersIdPeopleMemes.Count())]));
                                         return;
                                     }
                                 case MessageType.Audio:
                                     {
+                                        UpdateDataBase(message, user);
                                         await botclient.SendTextMessageAsync(message.Chat.Id, "Мои способности не позволяют мне слушать это аудио. Ты наверняка предлагаешь сыграть?)(/play)");
                                         await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString(StickersIdPeopleMemes[r.Next(StickersIdPeopleMemes.Count())]));
                                         return;
@@ -122,21 +154,6 @@ namespace Telegram_bot
                             }
                             return;
                         }
-                        //case UpdateType.CallbackQuery:
-                        //    {
-                        //        var message = update.CallbackQuery;
-                        //        foreach (var x in CorrectAnswers)
-                        //        {
-                        //            if (message.Data == x)
-                        //            {
-                        //                c++;
-                        //                await botclient.SendTextMessageAsync(message.Message.Chat.Id, $"Поздравляю!\n{message.Data} - правильный ответ!\nУ вас {c} балл(ов)");
-                        //                return;
-                        //            }
-                        //        }
-                        //        await botclient.SendTextMessageAsync(message.Message.Chat.Id, $"Не расстраивайтесь\n{message.Data} - неправильный ответ!\nУ вас {c} балл(ов)");
-                        //        return;
-                        //    }
                 }
             }
             catch (Exception ex)
@@ -204,6 +221,8 @@ namespace Telegram_bot
                     //Если пришла другая команда, то надо выйти и посмотреть это. Иначе будет бесконечная игра
                     if (updates.FirstOrDefault(u => u.Type == UpdateType.Message && !AnswId.Contains(u.Message.MessageId.ToString())) != null)
                     {
+                        Data_Base[message.Chat.Id.ToString()] = (Data_Base[message.Chat.Id.ToString()].Item1, Math.Max(Record[message.Chat.Id.ToString()], Data_Base[message.Chat.Id.ToString()].Item2), DateTime.Now.ToString());
+                        Parsing.LoadingDataBase();
                         return;
                     }
                     // Пауза перед повторной проверкой
@@ -215,7 +234,7 @@ namespace Telegram_bot
                 if (CorrectAnswers[y] == selectedPlayer)
                 {
                     c++;
-                    Record = Math.Max(c,Record);
+                    Record[message.Chat.Id.ToString()] = Math.Max(c, Record[message.Chat.Id.ToString()]);
                     await botclient.SendTextMessageAsync(message.Chat.Id, $"Поздравляю!\n{selectedPlayer} - правильный ответ!\nУ вас {c} балл(ов)");
                 }
                 else
@@ -227,6 +246,8 @@ namespace Telegram_bot
             }
             if(ListOfRandoms.Count == FootballPlayers.Count)
             {
+                Data_Base[message.Chat.Id.ToString()] = (Data_Base[message.Chat.Id.ToString()].Item1, Math.Max(Record[message.Chat.Id.ToString()], Data_Base[message.Chat.Id.ToString()].Item2), DateTime.Now.ToString());
+                Parsing.LoadingDataBase();
                 await botclient.SendTextMessageAsync(message.Chat.Id, "Ты доиграл до конца, поздравляю!\nМожешь начать заново(/play)");
             }
             return;
@@ -243,6 +264,12 @@ namespace Telegram_bot
 
             Console.WriteLine(ErrorMessage);
             return Task.CompletedTask;
+        }
+
+        private static void UpdateDataBase(Message message,string user)
+        {
+            Data_Base[message.Chat.Id.ToString()] = ($"{user}", Record[message.Chat.Id.ToString()], DateTime.Now.ToString());
+            Parsing.LoadingDataBase();
         }
     }
 }

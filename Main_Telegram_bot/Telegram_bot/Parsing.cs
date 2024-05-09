@@ -32,5 +32,30 @@ namespace Telegram_bot
             Game.StickersIdCats = File.ReadAllLines("Files/StickersIdCats.txt").Where(x => x != "").ToList();
             Game.StickersIdPeopleMemes = File.ReadAllLines("Files/StickersIdPeopleMemes.txt").Where(x => x != "").ToList();
         }
+
+        public static void LoadingDataBase()
+        {
+            using (var f = new FileStream("Files/DataBase.txt",FileMode.OpenOrCreate))
+            using (var bf = new StreamWriter(f))
+            {
+                foreach(var x in Game.Data_Base)
+                {
+                    bf.WriteLine(x);
+                }
+            }
+        }
+
+        public static void DownloadingDataBase()
+        {
+            using (var f = new FileStream("Files/DataBase.txt", FileMode.Open))
+            using (var bf = new StreamReader(f))
+            {
+                if(bf.BaseStream.Length > 0)
+                {
+                    var x = bf.ReadLine().Split(new char[] { ' ', '[', ']', '(', ')', ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    Game.Data_Base[x[0]] = (x[1], int.Parse(x[2]), x[3] + " " + x[4]);
+                }
+            }
+        }
     }
 }
