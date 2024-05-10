@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Dz\\cs211a-bonus2-Rostrost3\\Main_Telegram_bot\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{496FA1F8-B3CB-476C-9570-2576E24FD6E8}|Telegram_bot\\Telegram_bot.csproj|c:\\dz\\cs211a-bonus2-rostrost3\\main_telegram_bot\\telegram_bot\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{496FA1F8-B3CB-476C-9570-2576E24FD6E8}|Telegram_bot\\Telegram_bot.csproj|solutionrelative:telegram_bot\\game.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{496FA1F8-B3CB-476C-9570-2576E24FD6E8}|Telegram_bot\\Telegram_bot.csproj|c:\\dz\\cs211a-bonus2-rostrost3\\main_telegram_bot\\telegram_bot\\parsing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{496FA1F8-B3CB-476C-9570-2576E24FD6E8}|Telegram_bot\\Telegram_bot.csproj|solutionrelative:telegram_bot\\parsing.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{496FA1F8-B3CB-476C-9570-2576E24FD6E8}|Telegram_bot\\Telegram_bot.csproj|c:\\dz\\cs211a-bonus2-rostrost3\\main_telegram_bot\\telegram_bot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{496FA1F8-B3CB-476C-9570-2576E24FD6E8}|Telegram_bot\\Telegram_bot.csproj|solutionrelative:telegram_bot\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Dz\\cs211a-bonus2-Rostrost3\\Main_Telegram_bot\\Telegram_bot\\Program.cs",
+              "RelativeDocumentMoniker": "Telegram_bot\\Program.cs",
+              "ToolTip": "C:\\Dz\\cs211a-bonus2-Rostrost3\\Main_Telegram_bot\\Telegram_bot\\Program.cs",
+              "RelativeToolTip": "Telegram_bot\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAABCAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-01T13:06:47.527Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Parsing.cs",
+              "DocumentMoniker": "C:\\Dz\\cs211a-bonus2-Rostrost3\\Main_Telegram_bot\\Telegram_bot\\Parsing.cs",
+              "RelativeDocumentMoniker": "Telegram_bot\\Parsing.cs",
+              "ToolTip": "C:\\Dz\\cs211a-bonus2-Rostrost3\\Main_Telegram_bot\\Telegram_bot\\Parsing.cs",
+              "RelativeToolTip": "Telegram_bot\\Parsing.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAgwDQAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-01T13:06:48.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Game.cs",
+              "DocumentMoniker": "C:\\Dz\\cs211a-bonus2-Rostrost3\\Main_Telegram_bot\\Telegram_bot\\Game.cs",
+              "RelativeDocumentMoniker": "Telegram_bot\\Game.cs",
+              "ToolTip": "C:\\Dz\\cs211a-bonus2-Rostrost3\\Main_Telegram_bot\\Telegram_bot\\Game.cs",
+              "RelativeToolTip": "Telegram_bot\\Game.cs",
+              "ViewState": "AQIAAOQAAAAAAAAAAAAowAEBAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-01T13:06:49.992Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
