@@ -32,7 +32,7 @@ namespace Telegram_bot
 
         public static Dictionary<string,int> Record = new Dictionary<string, int>(); //Рекорд: id - макс за все раунды
 
-        public static Dictionary<string, (string, int, string)> Data_Base = new Dictionary<string, (string, int, string)>(); 
+        public static Dictionary<string, (string, int, string)> Data_Base = new Dictionary<string, (string, int, string)>(); //База данных: id - имя,рекорд,время последнего посещения
 
         public static async Task Update(ITelegramBotClient botclient, Update update, CancellationToken token)
         {
@@ -75,7 +75,6 @@ namespace Telegram_bot
                                                 await botclient.SendTextMessageAsync(message.Chat.Id, $"Привет, {user}! :)\nТы тут первый раз, приятно познакомиться\nНапиши Играть(/play) чтобы начать игру!",replyMarkup: replyKeyboard);
                                                 Record[message.Chat.Id.ToString()] = 0;
                                                 UpdateDataBase(message, user);
-                                                Parsing.LoadingDataBase();
                                             }
                                             else
                                             {
@@ -88,9 +87,9 @@ namespace Telegram_bot
                                         }
                                         if (message.Text.ToLower().Contains("пока") || message.Text.ToLower().Contains("/end"))
                                         {
-                                            UpdateDataBase(message, user);
                                             await botclient.SendTextMessageAsync(message.Chat.Id, $"Ваши баллы: {c}\nПока, {user} ;)");
                                             await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString("CAACAgIAAxkBAAEMDjRmN2Bm8O57fdZcQV-zyfaGXwhT9wACoBkAApvQeUh5IuR9qD2hKTUE"));
+                                            UpdateDataBase(message, user);
                                             return;
                                         }
                                         if (message.Text.ToLower().Contains("рекорд") || message.Text.ToLower().Contains("/max"))
@@ -102,10 +101,15 @@ namespace Telegram_bot
                                                 if (Data_Base[x].Item2 > maxx)
                                                 {
                                                     maxx = Data_Base[x].Item2;
-                                                    usermax = Data_Base[x].Item1;
+                                                    usermax = Data_Base[x].Item1 + " ";
+                                                }
+                                                else if (Data_Base[x].Item2 == maxx)
+                                                {
+                                                    maxx = Data_Base[x].Item2;
+                                                    usermax += Data_Base[x].Item1 + " ";
                                                 }
                                             }
-                                            await botclient.SendTextMessageAsync(message.Chat.Id, $"Рекорд среди всех пользователей обладает игрок: {usermax} = {maxx}");
+                                            await botclient.SendTextMessageAsync(message.Chat.Id, $"Рекорд среди всех пользователей обладает(ют) игрок(и): {usermax} = {maxx}");
                                             await botclient.SendStickerAsync(message.Chat.Id, InputFile.FromString("CAACAgIAAxkBAAEMDktmN2ZTSWSxhO3ym5hJeBdRleqX0QACwBsAAskEMUrgWHe0nAUiGzUE"));
                                             UpdateDataBase(message, user);
                                             return;

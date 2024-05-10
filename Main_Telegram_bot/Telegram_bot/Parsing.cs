@@ -50,10 +50,11 @@ namespace Telegram_bot
             using (var f = new FileStream("Files/DataBase.txt", FileMode.Open))
             using (var bf = new StreamReader(f))
             {
-                if(bf.BaseStream.Length > 0)
+                while(!bf.EndOfStream)
                 {
                     var x = bf.ReadLine().Split(new char[] { ' ', '[', ']', '(', ')', ',' }, StringSplitOptions.RemoveEmptyEntries);
                     Game.Data_Base[x[0]] = (x[1], int.Parse(x[2]), x[3] + " " + x[4]);
+                    Game.Record[x[0]] = int.Parse(x[2]);
                 }
             }
         }
